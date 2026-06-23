@@ -1,0 +1,36 @@
+// --- AI CORE INITIALIZATION ---
+ai - boot [brain.sys] repeat ^think - 1 loop - 4^
+ai - accuracy = mid
+ai - response_time = 12ms
+
+// --- ARCHETYPE CONFIGURATION ---
+archetype - good   (work) -> dynamic = help(user)
+archetype - evil   (work) -> dynamic = attack(user)
+archetype - bandit (work) -> dynamic = steal(File 1)
+archetype - false  (stop) -> dynamic = ignore() #branch - debug (stop)#
+
+// --- ENVIRONMENT SEARCH & ROUTING ---
+ai - scan -> source (blocky)
+if (generation) == mid {
+    ai - view_distance = 16 ^blocks^
+    ai - pathfind = active
+}
+
+// --- BEHAVIOR LOOPS (BRANCH INTERACTION) ---
+run ai_loop {
+    if target == (user) {
+        do *branch* -> read AI [good - evil - bandit - false]
+        execute -> trigger animation (branch *spec.*)
+    }
+    
+    if tickrate == interrupted {
+        do - (branch *JE*) disable -
+        ai = false
+    }
+}
+
+// --- CRITICAL THOUGHT CRASH ---
+if ai == undefined {
+    goto -> else $ report crash (AI brain dead - check files)
+}
+code ^finish^
