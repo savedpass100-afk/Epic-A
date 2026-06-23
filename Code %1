@@ -1,0 +1,11 @@
+game = 3D
+name = A
+tab = menu
+(File 1) = (world name) own by (user)
+keybinds = R (branch) E (branch) CTRL + Q (exit)
+(generation) = mid
+AI = good - evil - bandit - false
+source = blocky #not minecraft#
+events = (branch *spec.*) do - (branch *JE*) disable -
+branches = (file *code *gen**)
+code ^finish^
