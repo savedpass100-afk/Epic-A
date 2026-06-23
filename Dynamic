@@ -1,0 +1,40 @@
+// --- DYNAMIC SYSTEM INITIALIZATION ---
+dynamic - core [engine.phys] repeat ^tick - 1 loop - 5^
+dynamic - update_rate = high
+dynamic - physics = 3D
+
+// --- STATE & MOVEMENT MODIFIERS ---
+modify -> character (user) {
+    speed_multiplier = mid
+    jump_power = ^stand - 1^
+    state = active
+}
+
+// --- TIMING BAR & ANIMATION TRIGGERS ---
+run timing_sequence {
+    trigger -> animation (id = 137357429772849)
+    do *branch* -> execute ^timing_bar_match^
+    
+    if timing == perfect {
+        do - (branch *spec.*) active
+        keybinds = E (branch) -> trigger_ability()
+    }
+    if timing == miss {
+        do - (branch *JE*) disable
+        goto -> warning $ dynamic action failed
+    }
+}
+
+// --- WORLD TRANSITIONS ---
+if tab == menu {
+    dynamic - environment = paused
+} else {
+    dynamic - environment = (generation)
+}
+
+// --- INTERPRETATION FAILURE ---
+if dynamic - core == locked {
+    branch - control (stop)
+    goto -> else $ report crash (physics overload - check files)
+}
+code ^finish^
