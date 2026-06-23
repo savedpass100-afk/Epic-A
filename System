@@ -1,1 +1,33 @@
-Making...
+// --- SYSTEM BRANCH CORE - ai help ---
+system - initialize [core.branches]
+load -> branch (control) => active
+load -> branch (camera) => active
+load -> branch (debug) => standby [stop]
+load -> branch (chat) => active
+load -> branch (GUI) => active
+load -> branch (save file) => active
+
+// --- BRANCH DATA ROUTING ---
+branch(control) -> link -> keybinds (R) + (E)
+branch(camera) -> link -> view (3D)
+branch(chat) -> link -> AI (good - evil - bandit - false)
+branch(GUI) -> link -> tab (menu)
+
+// --- SYSTEM LOOP INTERPRETER ---
+run system (java) :
+    if branch == (work) {
+        do *branch* -> execute ^stand - 1 loop - 5^
+    }
+    if branch == (stop) {
+        bypass *branch* -> hold ^0^
+    }
+
+// --- NETWORK / FILE CHECK ---
+system - sync (File 1) -> (world name)
+if source != (blocky) {
+    do - (branch *JE*) disable
+    goto -> else $ report crash (check files)
+}
+
+// --- SYSTEM EXIT ---
+trigger (CTRL + Q) = system.kill(code ^finish^)
