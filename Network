@@ -1,0 +1,27 @@
+// --- NETWORK INITIALIZATION ---
+network - setup (ping) repeat ^connect - 1 loop - 3^
+network - status (online)
+network - security (blocky.firewall)
+
+// --- CONNECTION CHANNELS ---
+channel - host (user) -> listen -> port = 25565
+channel - peer (friend) -> join -> status (work)
+channel - sync (world name) -> load [File 1]
+
+// --- DATA STREAMING (BRANCHES) ---
+stream -> branch (chat) => send / receive [AI = good - evil - bandit - false]
+stream -> branch (control) => tickrate = mid
+stream -> branch (GUI) => update -> tab (menu)
+
+// --- NETWORK EVENTS & FAILURES ---
+network - packet (branch *spec.*) do - (branch *JE*) disable -
+if ping > 300ms {
+    do - reduce (generation) = low
+}
+
+// --- DISCONNECT / ERROR HANDLING ---
+if network == (disconnect) {
+    branch - save file (work) -> emergency_dump()
+    code ^finish^
+}
+else $ report crash (network timeout - check files)
