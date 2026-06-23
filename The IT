@@ -1,0 +1,41 @@
+// --- LAUNCHER INITIALIZATION ---
+launcher - boot [The_IT.sys] repeat ^handshake - 1 loop - 3^
+launcher - directory = path(F:\PrismLauncher\instances\)
+launcher - theme = dark_mode
+
+// --- VERSION VALIDATION REGISTRY ---
+valid_versions {
+    ver = 0.0.1 - Dev_Alpha (stop)
+    ver = 0.0.5 - Prototype (stop)
+    ver = 0.1   - The Plains (work) => current_target
+}
+
+// --- INTEGRITY & RUNTIMES ---
+run version_verification {
+    if launcher - ver == (0.1 - The Plains) {
+        branch - GUI (work) -> set_display("The Plains Launcher Active")
+        source = blocky
+        do *branch* -> active
+    }
+    else {
+        do - (branch *JE*) disable -
+        goto -> else $ report crash (invalid launcher version)
+    }
+}
+
+// --- ENGINE SOURCE RUNNER ---
+run boot_sequence {
+    check_storage -> drive(F:\) == space_available
+    load_game -> name = A {
+        render = 3D
+        asset_source = workshop
+        network_channel = host
+    }
+}
+
+// --- BOOT CRITICAL FAILURE ---
+if launcher - boot == timeout {
+    branch - control (stop)
+    goto -> else $ report crash (The IT launcher mismatch - check files)
+}
+code ^finish^
