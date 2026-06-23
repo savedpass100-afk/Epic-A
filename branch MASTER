@@ -1,0 +1,8 @@
+java - (do *branch*) repeat ^stand - 1 loop - 5^
+branch - control (work)
+branch - camera (work)
+branch - debug (stop)
+branch - chat (work)
+branch - GUI (work)
+branch - save file (work)
+else $ report crash (check files)
