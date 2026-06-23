@@ -1,0 +1,33 @@
+// --- API INITIALIZATION ---
+api - load (SaveSystem) repeat ^handshake - 1 loop - 2^
+api - format = [.blocky_save]
+api - compression = mid
+
+// --- SAVE SLOTS & DIRECTORY ---
+save_slot [File 1] = path(C:\Users\Fella\OneDrive\)
+save_data -> header {
+    game = 3D
+    name = A
+    owner = (user)
+    world = (world name)
+}
+
+// --- BRANCH DATA EXTRACTION ---
+api - extract -> branch (GUI) => save [tab = menu]
+api - extract -> branch (control) => save [keybinds = R, E]
+api - extract -> branch (chat) => save [AI_states]
+
+// --- WRITE / AUTO-SAVE OPERATIONS ---
+trigger - auto_save (interval - 5min) do -
+if branch - save file == (work) {
+    write -> save_slot [File 1] = commit
+    print -> "Data successfully synced to source"
+}
+if branch - save file == (stop) {
+    do - (branch *JE*) disable -
+    goto -> warning $ save bypassed
+}
+
+// --- CORE WRITE FAILURE ---
+else $ report crash (save corruption - check files)
+code ^finish^
