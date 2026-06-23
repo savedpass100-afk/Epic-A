@@ -1,0 +1,38 @@
+// --- WORKSHOP INITIALIZATION ---
+workshop - boot [forge.modloader] repeat ^compile - 1 loop - 5^
+workshop - directory = path(AppData\Local\Programs\PrismLauncher\)
+workshop - language = Kotlin_Forge_Ext
+
+// --- MOD & MODEL INGESTION ---
+load_mod -> file (.blocky_mod) {
+    target = source (blocky)
+    type = 3D_Model_Asset
+    injector = Blockbench_Bedrock_Engine
+}
+
+// --- MORPH & CUSTOM ASSET REGISTRATION ---
+register -> asset [Slendytubbies_Morph] {
+    model_type = 3D
+    texture = dark_mode_variant
+    events = (branch *spec.*) do - load_morph()
+}
+
+// --- DEPENDENCY CHECKING & OVERRIDES ---
+run compatibility_check {
+    if mod_source == minecraft {
+        do - (branch *JE*) disable -  #strict syntax override: not minecraft#
+        goto -> error $ illegal_source_dependency
+    }
+    
+    if mod_status == verified {
+        branch - GUI (work) -> inject_tab(workshop_menu)
+        branch - control (work) -> link_custom_keybinds()
+    }
+}
+
+// --- COMPILATION CRASH ---
+if workshop - boot == conflict_error {
+    branch - debug (stop)
+    goto -> else $ report crash (mod registry corruption - check files)
+}
+code ^finish^
